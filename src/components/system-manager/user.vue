@@ -1,7 +1,7 @@
 <template>
   <div id="user-list">
     <el-table
-      :data="tableData"
+      :data="users"
       stripe
       height="85%"
       width="100%">
@@ -19,12 +19,18 @@
       </el-table-column>
 
       <el-table-column
-        prop="status"
-        label="状态">
+        prop="phone"
+        label="手机">
+      </el-table-column>
+
+      <el-table-column
+        prop="email"
+        label="邮箱">
       </el-table-column>
 
       <el-table-column
         prop="lastLoginTime"
+        :formatter="dateFormat"
         label="最后登录时间">
       </el-table-column>
 
@@ -36,11 +42,13 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            @click="handleEdit(scope.$index, scope.row)">编辑
+          </el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="handleDelete(scope.$index, scope.row)">删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -60,119 +68,27 @@
 </template>
 
 <script>
+
+  // 导入api
+  import {
+    getUsers,
+    deleteUserById
+  } from '../../api/system-manager/user'
+
   export default {
     name: "user-manager",
     data() {
-        return {
-          currentPage4: 4,
-          tableData: [{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          },{
-            username: '王小虎',
-            status: '可用',
-            lastLoginTime: '2018-10-5',
-            roles: 'user'
-          }]
-        }
+      return {
+        currentPage4: 4,
+        users: []
+      }
     },
+
+    created() {
+      this._getUsers();
+    },
+
+
     methods: {
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -185,6 +101,40 @@
       },
       handleDelete(index, row) {
         console.log(index, row);
+        this._deleteUserById(row);
+        this._getUsers();
+      },
+
+      // 时间格式化
+      dateFormat(row, column, cellValue, index) {
+        if (cellValue == undefined) {
+          return "";
+        }
+        return this.moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
+      },
+
+      _getUsers() {
+        getUsers().then(result => {
+          if (result.status != 200) {
+            this.$message({
+              message: '错误',
+              type: 'error'
+            });
+            return;
+          }
+          this.users = result.data;
+        });
+      },
+
+      _deleteUserById(row) {
+        deleteUserById(row.userId).then(result => {
+          if (result.status == 200) {
+            this.$message({
+              message: '删除用户' + row.username + '成功',
+              type: 'success'
+            });
+          }
+        })
       }
     }
   }
@@ -196,6 +146,7 @@
     width: 100%;
     height: 100%;
   }
+
   .block {
     position: absolute;
     bottom: 20px;
