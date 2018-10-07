@@ -57,11 +57,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage4"
-        :page-sizes="[6, 12]"
-        :page-size="6"
+        :current-page="currentPage"
+        :page-sizes="[6, 8, 12]"
+        :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :total="total">
       </el-pagination>
     </div>
   </div>
@@ -79,58 +79,67 @@
     name: "user-manager",
     data() {
       return {
-        currentPage4: 4,
+        currentPage: 1,
+        pageSize: 6,
+        total: 0,
         users: []
       }
     },
 
     created() {
-      this._getUsers();
+      this._getUsers(this.currentPage, this.pageSize);
     },
 
-
     methods: {
+
+      // 分页信息修改
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        this._getUsers(this.currentPage, val);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this._getUsers(val, this.pageSize);
       },
+
+      // 编辑
       handleEdit(index, row) {
         console.log(index, row);
       },
+
+      // 删除
       handleDelete(index, row) {
-        console.log(index, row);
         this._deleteUserById(row);
-        this._getUsers();
+        this._getUsers(this.currentPage, this.pageSize);
       },
 
       // 时间格式化
       dateFormat(row, column, cellValue, index) {
-        if (cellValue == undefined) {
-          return "";
+        if (cellValue == undefined) {
+          return "";
         }
-        return this.moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
+        return this.moment(cellValue).format("YYYY-MM-DD HH:mm:ss");
       },
 
-      _getUsers() {
-        getUsers().then(result => {
-          if (result.status != 200) {
-            this.$message({message: '错误', type: 'error'});
-            return;
-          }
-          this.users = result.data.data;
-        });
+      _getUsers(currentPage, pageSize) {
+        getUsers(currentPage,pageSize)
+          .then(result => {
+            // 添加查询结果
+            this.users = result.data.data.list;
+            this.total = result.data.data.total;
+            this.currentPage = result.data.data.currentPage;
+            this.pageSize = result.data.data.pageSize;
+          }, error => {
+            console.log(error);
+          })
       },
 
       _deleteUserById(row) {
         deleteUserById(row.userId).then(result => {
           if (result.status == 200) {
             // 请求成功
-            if(result.data.status == 200) {
+            if (result.data.status == 200) {
               this.$message({message: '删除用户' + row.username + '成功', type: 'success'});
               return;
-            }else {
+            } else {
               this.$message({message: result.data.msg, type: 'warning'})
             }
           }

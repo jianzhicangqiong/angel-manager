@@ -1,8 +1,8 @@
 
 import axios from 'axios'
 // 获得用户列表
-export const getUsers = () => {
-  return axios.get("/api/user");
+export const getUsers = (currentPage, pageSize) => {
+  return axios.get("/api/user?currentPage="+currentPage+"&pageSize="+pageSize);
 };
 
 //通过Id删除用户
