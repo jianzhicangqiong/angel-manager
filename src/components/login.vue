@@ -49,7 +49,7 @@
             });
             return;
           }
-          this.$message({message: '登录失败', type: 'error'});
+          this.$message({message: '账户名和密码不匹配！', type: 'error'});
         }, error => {
           this.$message({message: '登录失败', type: 'error'});
         })
