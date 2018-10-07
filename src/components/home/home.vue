@@ -23,9 +23,9 @@
                   </template>
 
                   <el-menu-item-group>
-                    <el-menu-item index="1-1">用户组管理</el-menu-item>
+                    <el-menu-item index="">用户组管理</el-menu-item>
                     <el-menu-item index="/systemManager/user">用户管理</el-menu-item>
-                    <el-menu-item index="1-3">角色管理</el-menu-item>
+                    <el-menu-item index="/systemManager/role">角色管理</el-menu-item>
                     <el-menu-item index="1-4">权限管理</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>

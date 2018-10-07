@@ -25,6 +25,11 @@
 </template>
 
 <script>
+
+  import {
+    checkUser
+  } from "../api/auth/auth";
+
   export default {
     name: "Login",
     data() {
@@ -37,8 +42,16 @@
     },
     methods: {
       login() {
-        this.$router.push({
-          path: '/home'
+        checkUser(JSON.stringify(this.user)).then(result => {
+          if(result.data.status == 200) {
+            this.$router.push({
+              path: '/home'
+            });
+            return;
+          }
+          this.$message({message: '登录失败', type: 'error'});
+        }, error => {
+          this.$message({message: '登录失败', type: 'error'});
         })
       },
       resetForm() {

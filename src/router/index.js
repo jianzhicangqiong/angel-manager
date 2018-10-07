@@ -6,7 +6,10 @@ Vue.use(Router)
 // 导入组件
 import Login from '../components/login'
 import Home from '../components/home/home'
+
+// 系统管理组件
 import SystemManagerUser from '../components/system-manager/user'
+import SystemManagerRole from '../components/system-manager/role'
 
 export default new Router({
   routes: [
@@ -16,7 +19,8 @@ export default new Router({
       name:'home',
       component:Home,
       children: [
-        {path:'/systemManager/user', component: SystemManagerUser}
+        {path:'/systemManager/user', component: SystemManagerUser},
+        {path:'/systemManager/role', component: SystemManagerRole}
       ]}
   ]
 })
