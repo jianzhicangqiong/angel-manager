@@ -116,23 +116,23 @@
       _getUsers() {
         getUsers().then(result => {
           if (result.status != 200) {
-            this.$message({
-              message: '错误',
-              type: 'error'
-            });
+            this.$message({message: '错误', type: 'error'});
             return;
           }
-          this.users = result.data;
+          this.users = result.data.data;
         });
       },
 
       _deleteUserById(row) {
         deleteUserById(row.userId).then(result => {
           if (result.status == 200) {
-            this.$message({
-              message: '删除用户' + row.username + '成功',
-              type: 'success'
-            });
+            // 请求成功
+            if(result.data.status == 200) {
+              this.$message({message: '删除用户' + row.username + '成功', type: 'success'});
+              return;
+            }else {
+              this.$message({message: result.data.msg, type: 'warning'})
+            }
           }
         })
       }
