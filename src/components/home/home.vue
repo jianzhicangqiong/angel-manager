@@ -25,8 +25,7 @@
                   <el-menu-item-group>
                     <el-menu-item index="">用户组管理</el-menu-item>
                     <el-menu-item index="/systemManager/user">用户管理</el-menu-item>
-                    <el-menu-item index="/systemManager/role">角色管理</el-menu-item>
-                    <el-menu-item index="1-4">权限管理</el-menu-item>
+                    <el-menu-item index="/systemManager/permission">角色及权限管理</el-menu-item>
                   </el-menu-item-group>
                 </el-submenu>
               </el-menu>
@@ -36,7 +35,6 @@
 
         <!--类容主体-->
         <el-main>
-
           <!--导航路径。。。面包屑-->
           <el-breadcrumb separator="/" class="breadcrumb">
             <el-breadcrumb-item :to="{ path: '' }">首页</el-breadcrumb-item>

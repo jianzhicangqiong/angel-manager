@@ -9,7 +9,7 @@ import Home from '../components/home/home'
 
 // 系统管理组件
 import SystemManagerUser from '../components/system-manager/user'
-import SystemManagerRole from '../components/system-manager/role'
+import SystemManagerPermission from '../components/system-manager/permission'
 
 export default new Router({
   routes: [
@@ -20,7 +20,7 @@ export default new Router({
       component:Home,
       children: [
         {path:'/systemManager/user', component: SystemManagerUser},
-        {path:'/systemManager/role', component: SystemManagerRole}
+        {path:'/systemManager/permission', component: SystemManagerPermission}
       ]}
   ]
 })
