@@ -38,6 +38,21 @@
         prop="roles"
         label="角色">
       </el-table-column>
+
+      <!--展开行-->
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="真实姓名">
+              <span>{{ props.row.realName }}</span>
+            </el-form-item>
+            <el-form-item label="昵称">
+              <span>{{ props.row.nickName }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" fixed="right">
         <template slot-scope="scope">
           <el-button
@@ -159,6 +174,19 @@
   .block {
     position: absolute;
     bottom: 20px;
+  }
+
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
   }
 
 </style>

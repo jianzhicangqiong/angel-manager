@@ -1,7 +1,7 @@
 <template>
   <el-tree
-    :props="props1"
-    :load="loadNode1"
+    :props="props"
+    :load="loadNode"
     lazy
     show-checkbox
     node-key="id"
@@ -28,21 +28,26 @@
 </template>
 
 <script>
+
+  // 导入api
+  import {
+    getRolesByParentId
+  } from '../../api/system-manager/role'
+
   let id = 1000;
   export default {
     name: "role",
     data() {
       return {
-        props1: {
+        props: {
           label: 'name',
-          children: 'zones',
-          isLeaf: 'leaf'
+          isLeaf: 'isLeaf'
         },
       };
     },
     methods: {
       append(data) {
-        const newChild = { id: id++, label: 'testtest', children: [] };
+        const newChild = {id: id++, label: 'testtest', children: []};
         if (!data.children) {
           this.$set(data, 'children', []);
         }
@@ -56,22 +61,22 @@
         children.splice(index, 1);
       },
 
-      loadNode1(node, resolve) {
+      loadNode(node, resolve) {
         if (node.level === 0) {
-          return resolve([{name: 'region'}]);
+          this._getRolesByParentId(1, resolve);
         }
-        if (node.level > 1) return resolve([]);
 
-        setTimeout(() => {
-          const data = [{
-            name: 'leaf',
-            leaf: true
-          }, {
-            name: 'zone'
-          }];
+        if (node.level > 1) {
+          this._getRolesByParentId(node.level, resolve);
+        }
+      },
 
-          resolve(data);
-        }, 500);
+      _getRolesByParentId(parentId, resolve) {
+        getRolesByParentId(parentId).then(resp => {
+          if (resp.status == 200 && resp.data.status == 200) {
+            return resolve(resp.data.data);
+          }
+        })
       }
     }
   }
